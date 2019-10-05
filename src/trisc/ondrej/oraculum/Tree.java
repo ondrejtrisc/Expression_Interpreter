@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 class Tree {
 
-    static ArrayList<Tree> T;
+    static ArrayList<Tree> T = new ArrayList<Tree>();
 
     private int n;
     private ArrayList<Tree> children;
@@ -13,10 +13,11 @@ class Tree {
 
         this.n = trees.size();
         this.children = trees;
-        T.add(this);
+        Tree.T.add(this);
     }
 
     public static void main(String[] args) {
 
+        Tree leaf = new Tree(new ArrayList<Tree>());
     }
 }
