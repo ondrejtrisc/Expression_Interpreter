@@ -1,4 +1,9 @@
 package trisc.ondrej.oraculum;
 
-public class Tree {
+import java.util.ArrayList;
+
+class Tree {
+
+    private int n;
+    private ArrayList<Tree> children;
 }
