@@ -17,7 +17,7 @@ public class StringTree {
 
         s = s.replaceAll("\\s","");
 
-        ArrayList<StringTree> children = new ArrayList<StringTree>();
+        ArrayList<StringTree> children = new ArrayList<>();
 
         if (s.isEmpty()) { return new StringTree(s, children); }
 
@@ -34,7 +34,7 @@ public class StringTree {
         }
         String content = s.substring(0, i);
 
-        ArrayList<Integer> branchEnds = new ArrayList<Integer>();
+        ArrayList<Integer> branchEnds = new ArrayList<>();
         branchEnds.add(i);
 
         //count the children
@@ -55,9 +55,9 @@ public class StringTree {
         }
 
         //read the children
-        for (int j = 0; j < branchEnds.size() - 1; j++) {
+        for (i = 0; i < branchEnds.size() - 1; i++) {
 
-            String childString = s.substring(branchEnds.get(j) + 1, branchEnds.get(j + 1));
+            String childString = s.substring(branchEnds.get(i) + 1, branchEnds.get(i + 1));
             StringTree child = read(childString);
             children.add(child);
         }
@@ -69,11 +69,11 @@ public class StringTree {
 
         if (children.size() == 0) { return content; }
 
-        String s = "";
+        StringBuilder s = new StringBuilder();
         for (int i = 0; i < children.size(); i++) {
 
-            if (i == children.size() - 1) { s = s + children.get(i).toString(); }
-            else { s = s + children.get(i).toString() + ", "; }
+            if (i == children.size() - 1) { s.append(children.get(i).toString()); }
+            else { s.append(children.get(i).toString()).append(", "); }
         }
         return content + "(" + s + ")";
     }
