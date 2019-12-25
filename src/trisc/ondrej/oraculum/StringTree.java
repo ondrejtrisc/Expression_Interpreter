@@ -78,9 +78,96 @@ public class StringTree {
         return content + "(" + s + ")";
     }
 
+    public String evaluate() {
+
+        ArrayList<String> ins = new ArrayList<>();
+        for (StringTree child: children) { ins.add(child.evaluate()); }
+
+        switch(content) {
+
+            case "=":
+
+                try {
+
+                    String s = String.valueOf(Double.parseDouble(ins.get(0)));
+                    for (int i = 1; i < ins.size(); i++) {
+                        if (!s.equals(String.valueOf(Double.parseDouble(ins.get(i))))) { return "false"; }
+                    }
+                    return "true";
+                }
+                catch (NumberFormatException e) {
+
+                    for (int i = 1; i < ins.size(); i++) {
+                        if (!ins.get(0).equals(ins.get(i))) { return "false"; }
+                    }
+                    return "true";
+                }
+
+            case "!":
+
+                if (ins.get(0).equals("true")) { return "false"; }
+                return "true";
+
+            case "&":
+
+                for (String in: ins) {
+                    if (in.equals("false")) { return "false"; }
+                }
+                return "true";
+
+            case "||":
+
+                for (String in: ins) {
+                    if (in.equals("true")) { return "true"; }
+                }
+                return "false";
+
+            case "if":
+
+                if (ins.get(0).equals("true")) { return ins.get(1); }
+                return ins.get(2);
+
+            case "+":
+
+                double ret = 0;
+                for (String in: ins) {
+                    ret += Double.parseDouble(in);
+                }
+                return String.valueOf(ret);
+
+            case "-":
+
+                return String.valueOf(Double.parseDouble(ins.get(0)) - Double.parseDouble(ins.get(1)));
+
+            case "*":
+
+                ret = 1;
+                for (String in: ins) {
+                    ret *= Double.parseDouble(in);
+                }
+                return String.valueOf(ret);
+
+            case "/":
+
+                return String.valueOf(Double.parseDouble(ins.get(0)) / Double.parseDouble(ins.get(1)));
+
+            default:
+
+                if (ins.size() == 0) { return content; }
+
+                StringBuilder s = new StringBuilder();
+                for (int i = 0; i < ins.size(); i++) {
+
+                    if (i == ins.size() - 1) { s.append(ins.get(i)); }
+                    else { s.append(ins.get(i)).append(", "); }
+                }
+                return content + "(" + s + ")";
+        }
+    }
+
     public static void main(String[] args) {
 
-        StringTree t = read("a(b, c(d, e({f,g(h)}), g(h, i(j(k)))))");
-        System.out.println(t);
+        StringTree t = read("if(!(=(+(*(2, 3), 4), -(/(21, 2), 0.5))), fail, success)");
+        System.out.println(t.evaluate());
     }
 }
