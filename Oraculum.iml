@@ -7,5 +7,6 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="jetty-all-9.4.24.v20191120-uber" level="project" />
   </component>
 </module>

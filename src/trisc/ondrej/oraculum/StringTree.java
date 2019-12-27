@@ -2,7 +2,7 @@ package trisc.ondrej.oraculum;
 
 import java.util.ArrayList;
 
-public class StringTree {
+class StringTree {
 
     String content;
     ArrayList<StringTree> children;

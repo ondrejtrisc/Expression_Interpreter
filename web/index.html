@@ -4,7 +4,10 @@
     <head>
 
         <link rel="icon" href="assets/oraculum.ico" />
-        <link rel="stylesheet" type="text/css" href="style.css" />
+        <link rel="stylesheet" type="text/css" href="css/style.css" />
+        
+        <script type="text/javascript" src="js/libs/jquery-3.4.1.js"></script>
+        <script type="text/javascript" src="js/main.js"></script>
 
         <title>Oraculum</title>
 
@@ -12,7 +15,7 @@
     <body>
         
         <div id="console">
-            <form action="">
+            <form action="javascript:main(document.forms[0].elements[0].value);">
                 <input type="text" size="200" />
                 <button type="submit">&crarr;</button>
             </form>
