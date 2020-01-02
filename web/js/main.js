@@ -1,3 +1,5 @@
+"use strict";
+
 const serverUpdate = (response) => {
 
     document.getElementById("display").innerHTML = response;
