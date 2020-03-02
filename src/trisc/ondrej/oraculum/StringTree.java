@@ -83,7 +83,62 @@ class StringTree {
         ArrayList<String> ins = new ArrayList<>();
         for (StringTree child: children) { ins.add(child.evaluate()); }
 
+
         switch(content) {
+
+            case "id":
+
+                return ins.get(0);
+
+            case "!":
+
+                if (ins.get(0).equals("true")) {
+
+                    return "false";
+                }
+                else if (ins.get(0).equals("false")) {
+
+                    return "true";
+                }
+                return "error";
+
+            case "&":
+
+                String ret = "true";
+                for (String in: ins) {
+
+                    if (in.equals("false")) {
+
+                        ret = "false";
+                        break;
+                    }
+                    else if (in.equals("true")) {
+
+                        continue;
+                    }
+                    ret = "error";
+                    break;
+                }
+                return ret;
+
+            case "||":
+
+                ret = "false";
+                for (String in: ins) {
+
+                    if (in.equals("true")) {
+
+                        ret = "true";
+                        break;
+                    }
+                    else if (in.equals("false")) {
+
+                        continue;
+                    }
+                    ret = "error";
+                    break;
+                }
+                return ret;
 
             case "=":
 
@@ -91,65 +146,156 @@ class StringTree {
 
                     String s = String.valueOf(Double.parseDouble(ins.get(0)));
                     for (int i = 1; i < ins.size(); i++) {
-                        if (!s.equals(String.valueOf(Double.parseDouble(ins.get(i))))) { return "false"; }
+
+                        if (!s.equals(String.valueOf(Double.parseDouble(ins.get(i))))) {
+
+                            return "false";
+                        }
                     }
                     return "true";
                 }
                 catch (NumberFormatException e) {
 
                     for (int i = 1; i < ins.size(); i++) {
-                        if (!ins.get(0).equals(ins.get(i))) { return "false"; }
+
+                        if (!ins.get(0).equals(ins.get(i))) {
+
+                            return "false";
+                        }
                     }
                     return "true";
                 }
 
-            case "!":
+            case "<=":
 
-                if (ins.get(0).equals("true")) { return "false"; }
-                return "true";
+                try {
 
-            case "&":
+                    double d1 = Double.parseDouble(ins.get(0));
+                    double d2 = Double.parseDouble(ins.get(1));
+                    if (d1 <= d2) {
 
-                for (String in: ins) {
-                    if (in.equals("false")) { return "false"; }
+                        return "true";
+                    }
+                    return "false";
                 }
-                return "true";
+                catch (NumberFormatException e) {
 
-            case "||":
-
-                for (String in: ins) {
-                    if (in.equals("true")) { return "true"; }
+                    return "error";
                 }
-                return "false";
+
+            case ">=":
+
+                try {
+
+                    double d1 = Double.parseDouble(ins.get(0));
+                    double d2 = Double.parseDouble(ins.get(1));
+                    if (d1 >= d2) {
+
+                        return "true";
+                    }
+                    return "false";
+                }
+                catch (NumberFormatException e) {
+
+                    return "error";
+                }
+
+            case "<":
+
+                try {
+
+                    double d1 = Double.parseDouble(ins.get(0));
+                    double d2 = Double.parseDouble(ins.get(1));
+                    if (d1 < d2) {
+
+                        return "true";
+                    }
+                    return "false";
+                }
+                catch (NumberFormatException e) {
+
+                    return "error";
+                }
+
+            case ">":
+
+                try {
+
+                    double d1 = Double.parseDouble(ins.get(0));
+                    double d2 = Double.parseDouble(ins.get(1));
+                    if (d1 > d2) {
+
+                        return "true";
+                    }
+                    return "false";
+                }
+                catch (NumberFormatException e) {
+
+                    return "error";
+                }
 
             case "if":
 
-                if (ins.get(0).equals("true")) { return ins.get(1); }
+                if (ins.get(0).equals("true")) {
+
+                    return ins.get(1);
+                }
                 return ins.get(2);
 
             case "+":
 
-                double ret = 0;
-                for (String in: ins) {
-                    ret += Double.parseDouble(in);
+                try {
+                    double retNum = 0;
+                    for (String in: ins) {
+                        retNum += Double.parseDouble(in);
+                    }
+                    return String.valueOf(retNum);
                 }
-                return String.valueOf(ret);
+                catch (NumberFormatException e) {
+
+                    return "error";
+                }
 
             case "-":
 
-                return String.valueOf(Double.parseDouble(ins.get(0)) - Double.parseDouble(ins.get(1)));
+                try {
+                    return String.valueOf(Double.parseDouble(ins.get(0)) - Double.parseDouble(ins.get(1)));
+                }
+                catch (NumberFormatException e) {
+
+                    return "error";
+                }
 
             case "*":
 
-                ret = 1;
-                for (String in: ins) {
-                    ret *= Double.parseDouble(in);
+                try {
+
+                    double retNum = 1;
+                    for (String in: ins) {
+                        retNum *= Double.parseDouble(in);
+                    }
+                    return String.valueOf(retNum);
                 }
-                return String.valueOf(ret);
+                catch (NumberFormatException e) {
+
+                    return "error";
+                }
 
             case "/":
 
-                return String.valueOf(Double.parseDouble(ins.get(0)) / Double.parseDouble(ins.get(1)));
+                try {
+
+                    double denominator = Double.parseDouble(ins.get(1));
+                    if (denominator == 0) {
+
+                        return "error";
+                    }
+                    return String.valueOf(Double.parseDouble(ins.get(0)) / denominator);
+                }
+                catch (NumberFormatException e) {
+
+                    return "error";
+                }
 
             default:
 
