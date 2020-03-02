@@ -41,12 +41,12 @@ class StringTree {
         while (s.charAt(i) != ')') {
 
             i++;
-            int bracketDepth = 0;
+            int parenthesesDepth = 0;
             bracesDepth = 0;
-            while (bracketDepth > 0 || bracesDepth > 0 || (s.charAt(i) != ',' && s.charAt(i) != ')')) {
+            while (parenthesesDepth > 0 || bracesDepth > 0 || (s.charAt(i) != ',' && s.charAt(i) != ')')) {
 
-                if (s.charAt(i) == '(') { bracketDepth++; }
-                else if (s.charAt(i) == ')') { bracketDepth--; }
+                if (s.charAt(i) == '(') { parenthesesDepth++; }
+                else if (s.charAt(i) == ')') { parenthesesDepth--; }
                 else if (s.charAt(i) == '{') { bracesDepth++; }
                 else if (s.charAt(i) == '}') { bracesDepth--; }
                 i++;
