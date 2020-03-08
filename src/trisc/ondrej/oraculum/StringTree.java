@@ -81,8 +81,10 @@ class StringTree {
     public String evaluate() {
 
         ArrayList<String> ins = new ArrayList<>();
-        for (StringTree child: children) { ins.add(child.evaluate()); }
+        for (StringTree child: children) {
 
+            ins.add(child.evaluate());
+        }
 
         switch(content) {
 
@@ -240,13 +242,19 @@ class StringTree {
 
                     return ins.get(1);
                 }
-                return ins.get(2);
+                if (ins.get(0).equals("false")) {
+
+                    return ins.get(2);
+                }
+                return "error";
 
             case "+":
 
                 try {
+
                     double retNum = 0;
                     for (String in: ins) {
+
                         retNum += Double.parseDouble(in);
                     }
                     return String.valueOf(retNum);
@@ -259,6 +267,7 @@ class StringTree {
             case "-":
 
                 try {
+
                     return String.valueOf(Double.parseDouble(ins.get(0)) - Double.parseDouble(ins.get(1)));
                 }
                 catch (NumberFormatException e) {
@@ -272,6 +281,7 @@ class StringTree {
 
                     double retNum = 1;
                     for (String in: ins) {
+
                         retNum *= Double.parseDouble(in);
                     }
                     return String.valueOf(retNum);
@@ -304,8 +314,14 @@ class StringTree {
                 StringBuilder s = new StringBuilder();
                 for (int i = 0; i < ins.size(); i++) {
 
-                    if (i == ins.size() - 1) { s.append(ins.get(i)); }
-                    else { s.append(ins.get(i)).append(", "); }
+                    if (i == ins.size() - 1) {
+
+                        s.append(ins.get(i));
+                    }
+                    else {
+
+                        s.append(ins.get(i)).append(", ");
+                    }
                 }
                 return content + "(" + s + ")";
         }

@@ -7,7 +7,7 @@ class CommandHandler {
     void handleCommand(String cmd) {
 
         System.out.println(cmd);
-        result = StringTree.read(cmd).evaluate();
+        result = Expression.read(cmd).evaluate().write();
     }
 
     String getResult() { return result; }
