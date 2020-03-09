@@ -51,7 +51,7 @@ class Expression {
             else if (tree.content.charAt(0) == '[') {
 
                 String s = tree.content.substring(1, tree.content.length() - 1);
-                parameter = new Parameter("", read(s));
+                parameter = new Parameter("", Expression.read(s));
             }
         }
 
@@ -163,6 +163,23 @@ class Expression {
         }
     }
 
+    void substitute(Function context) {
+
+        if (this.parameter != null && context.parameters.contains(parameter)) {
+
+            this.parameter = new Parameter("", this.parameter.substituent);
+            this.elementaryDefinition = "";
+        }
+        if (this.definition != null) {
+
+            this.definition.expression.substitute(context);
+        }
+        for (Expression child : this.children) {
+
+            child.substitute(context);
+        }
+    }
+
     String write() {
 
         String rootString;
@@ -238,6 +255,8 @@ class Expression {
     }
 
     Function evaluate() {
+
+        System.out.println("evaluate: " + this.write());
 
         if (this.value != null) {
 

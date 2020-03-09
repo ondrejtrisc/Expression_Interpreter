@@ -64,36 +64,42 @@ class Function {
             this.parameters.get(i).substituent = ins.get(i);
         }
 
-//        ArrayList<Integer> indicesOfSubstitution = new ArrayList<>();
-//        for (int i = 0; i < ins.size(); i++) {
-//
-//            if (ins.get(i).nonEmpty()) {
-//
-//                indicesOfSubstitution.add(i);
-//            }
-//        }
+        ArrayList<Integer> indicesOfSubstitution = new ArrayList<>();
+        for (int i = 0; i < ins.size(); i++) {
 
-//        if ((this.parameters.size() == ins.size()) && (this.parameters.size() == indicesOfSubstitution.size())) {
+            if (ins.get(i).nonEmpty()) {
+
+                indicesOfSubstitution.add(i);
+            }
+        }
+
+        if ((this.parameters.size() == ins.size()) && (this.parameters.size() == indicesOfSubstitution.size())) {
 
             return this.expression.evaluate();
-//        }
-//
-//        Function ret = this.copy();
-//
-//        for (int i = 0; i < Math.min(ret.parameters.size(), ins.size()); i++) {
-//
-//            ret.parameters.get(i).substituent = ins.get(i);
-//        }
-//        ret.root.substitute(ret, indicesOfSubstitution);
-//        for (int i = 0; i < ret.variables.size(); i++) { ret.variables.get(i).substituent = null; }
-//
-//        ArrayList<Glyph> newVariables = new ArrayList<Glyph>();
-//        for (int i = 0; i < ret.variables.size(); i++) {
-//
-//            if (!indicesOfSubstitution.contains(i)) { newVariables.add(ret.variables.get(i)); }
-//        }
-//        ret.variables = newVariables;
-//
-//        return ret;
+        }
+
+        Function ret = this.copy();
+
+        for (int i = 0; i < Math.min(ret.parameters.size(), ins.size()); i++) {
+
+            ret.parameters.get(i).substituent = ins.get(i);
+        }
+        ret.expression.substitute(ret);
+        for (Parameter parameter : ret.parameters) {
+
+            parameter.substituent = null;
+        }
+
+        ArrayList<Parameter> newParameters = new ArrayList<>();
+        for (int i = 0; i < ret.parameters.size(); i++) {
+
+            if (!indicesOfSubstitution.contains(i)) {
+
+                newParameters.add(ret.parameters.get(i));
+            }
+        }
+        ret.parameters = newParameters;
+
+        return ret;
     }
 }

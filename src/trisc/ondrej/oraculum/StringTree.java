@@ -19,17 +19,38 @@ class StringTree {
 
         ArrayList<StringTree> children = new ArrayList<>();
 
-        if (s.isEmpty()) { return new StringTree(s, children); }
+        if (s.isEmpty()) {
 
-        if (s.charAt(s.length() - 1) != ')') { return new StringTree(s, children); }
+            return new StringTree(s, children);
+        }
+
+        if (s.charAt(s.length() - 1) != ')') {
+
+            return new StringTree(s, children);
+        }
 
         //read the root
         int bracesDepth = 0;
+        int bracketsDepth = 0;
         int i = 0;
-        while (s.charAt(i) != '(' || bracesDepth != 0) {
+        while (s.charAt(i) != '(' || bracesDepth != 0 || bracketsDepth != 0) {
 
-            if (s.charAt(i) == '{') { bracesDepth++; }
-            else if (s.charAt(i) == '}') { bracesDepth--; }
+            if (s.charAt(i) == '{') {
+
+                bracesDepth++;
+            }
+            else if (s.charAt(i) == '}') {
+
+                bracesDepth--;
+            }
+            else if (s.charAt(i) == '[') {
+
+                bracketsDepth++;
+            }
+            else if (s.charAt(i) == ']') {
+
+                bracketsDepth--;
+            }
             i++;
         }
         String content = s.substring(0, i);
@@ -43,12 +64,33 @@ class StringTree {
             i++;
             int parenthesesDepth = 0;
             bracesDepth = 0;
-            while (parenthesesDepth > 0 || bracesDepth > 0 || (s.charAt(i) != ',' && s.charAt(i) != ')')) {
+            bracketsDepth = 0;
+            while (parenthesesDepth > 0 || bracesDepth > 0 || bracketsDepth > 0 || (s.charAt(i) != ',' && s.charAt(i) != ')')) {
 
-                if (s.charAt(i) == '(') { parenthesesDepth++; }
-                else if (s.charAt(i) == ')') { parenthesesDepth--; }
-                else if (s.charAt(i) == '{') { bracesDepth++; }
-                else if (s.charAt(i) == '}') { bracesDepth--; }
+                if (s.charAt(i) == '(') {
+
+                    parenthesesDepth++;
+                }
+                else if (s.charAt(i) == ')') {
+
+                    parenthesesDepth--;
+                }
+                else if (s.charAt(i) == '{') {
+
+                    bracesDepth++;
+                }
+                else if (s.charAt(i) == '}') {
+
+                    bracesDepth--;
+                }
+                else if (s.charAt(i) == '[') {
+
+                    bracketsDepth++;
+                }
+                else if (s.charAt(i) == ']') {
+
+                    bracketsDepth--;
+                }
                 i++;
             }
             branchEnds.add(i);
