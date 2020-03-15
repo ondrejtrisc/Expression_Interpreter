@@ -7,7 +7,7 @@ class Expression {
 
     ArrayList<Expression> children;
     private String elementaryDefinition;
-    Parameter parameter;
+    private Parameter parameter;
     private Function definition;
     private Function value;
 
@@ -261,8 +261,6 @@ class Expression {
 
     Function evaluate() {
 
-        System.out.println("evaluate exp: " + this.write());
-
         if (this.value != null) {
 
             return this.value;
@@ -287,8 +285,6 @@ class Expression {
             }
         }
         else if (this.definition != null) {
-
-            System.out.println("definition != null");
 
             ret = this.definition.evaluate(this.children);
         }
@@ -603,6 +599,7 @@ class Expression {
 
         //String s = "{a,x.{r,y.a({z.r(r, z)}, y)}({r,y.a({z.r(r, z)}, y)}, x)}({f,n.if(=(n, 0), 1, *(n, f(-(n, 1))))}, 5)";
         String s = "[{a.{t.a(t(t))}({t.a(t(t))})}({f,n.if(=(n, 0), 1, *(n, f(-(n, 1))))})](5)";
+        //String s = "{a,b,c,d,e,f.a(b(c, d), e(f))}(,, 2,,,3)";
         Expression expression = read(s);
         System.out.println(expression.evaluate().write());
     }
