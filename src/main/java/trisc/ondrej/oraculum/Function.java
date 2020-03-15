@@ -84,7 +84,7 @@ class Function {
 
             ret.parameters.get(i).substituent = ins.get(i);
         }
-        ret.expression.substitute(ret);
+        ret.expression.substitute(ret, indicesOfSubstitution);
         for (Parameter parameter : ret.parameters) {
 
             parameter.substituent = null;

@@ -7,7 +7,7 @@ class Expression {
 
     ArrayList<Expression> children;
     private String elementaryDefinition;
-    private Parameter parameter;
+    Parameter parameter;
     private Function definition;
     private Function value;
 
@@ -163,20 +163,25 @@ class Expression {
         }
     }
 
-    void substitute(Function context) {
+    void substitute(Function context, ArrayList<Integer> indicesOfSubstitution) {
 
-        if (this.parameter != null && context.parameters.contains(parameter)) {
+        if (this.parameter != null && context.parameters.contains(this.parameter)) {
 
-            this.parameter = new Parameter("", this.parameter.substituent);
-            this.elementaryDefinition = "";
+            int in = context.parameters.indexOf(this.parameter);
+
+            if (indicesOfSubstitution.contains(in)) {
+
+                this.parameter = new Parameter("", this.parameter.substituent);
+                this.elementaryDefinition = "";
+            }
         }
         if (this.definition != null) {
 
-            this.definition.expression.substitute(context);
+            this.definition.expression.substitute(context, indicesOfSubstitution);
         }
         for (Expression child : this.children) {
 
-            child.substitute(context);
+            child.substitute(context, indicesOfSubstitution);
         }
     }
 
@@ -256,7 +261,7 @@ class Expression {
 
     Function evaluate() {
 
-        System.out.println("evaluate: " + this.write());
+        System.out.println("evaluate exp: " + this.write());
 
         if (this.value != null) {
 
@@ -282,6 +287,8 @@ class Expression {
             }
         }
         else if (this.definition != null) {
+
+            System.out.println("definition != null");
 
             ret = this.definition.evaluate(this.children);
         }
@@ -590,5 +597,13 @@ class Expression {
 
         this.value = ret;
         return this.value;
+    }
+
+    public static void main(String[] args) {
+
+        //String s = "{a,x.{r,y.a({z.r(r, z)}, y)}({r,y.a({z.r(r, z)}, y)}, x)}({f,n.if(=(n, 0), 1, *(n, f(-(n, 1))))}, 5)";
+        String s = "[{a.{t.a(t(t))}({t.a(t(t))})}({f,n.if(=(n, 0), 1, *(n, f(-(n, 1))))})](5)";
+        Expression expression = read(s);
+        System.out.println(expression.evaluate().write());
     }
 }
