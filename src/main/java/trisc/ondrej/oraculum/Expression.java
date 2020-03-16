@@ -193,24 +193,7 @@ class Expression {
             Expression referent = this.parameter.substituent;
             if (referent != null) {
 
-                if (this.definition == referent.value && this.definition != null) {
-
-                    ArrayList<Expression> ins = new ArrayList<>();
-                    for (Parameter parameter : this.definition.parameters) {
-
-                        ins.add(parameter.substituent);
-                    }
-                    for (Parameter parameter : this.definition.parameters) {
-
-                        parameter.substituent = null;
-                    }
-                    rootString = this.definition.write();
-                    for (Parameter parameter : this.definition.parameters) {
-
-                        parameter.substituent = ins.get(this.definition.parameters.indexOf(parameter));
-                    }
-                }
-                else if (referent.children.size() == 0 || this.children.size() == 0) {
+                if (referent.children.size() == 0 || this.children.size() == 0) {
 
                     rootString = referent.write();
                 }
@@ -595,12 +578,158 @@ class Expression {
         return this.value;
     }
 
+    private ArrayList<String> writeSubEvaluation() {
+
+        Expression referent = this.parameter.substituent;
+        ArrayList<String> referentEvaluation = referent.writeEvaluation();
+
+        if (this.children.size() == 0) {
+
+            return referentEvaluation;
+        }
+
+        StringBuilder s = new StringBuilder();
+        for (int i = 0; i < this.children.size() - 1; i++) {
+
+            s.append(this.children.get(i).write()).append(", ");
+        }
+        s.append(this.children.get(this.children.size() - 1).write());
+
+        ArrayList<String> ret = new ArrayList<>();
+        String rootString;
+        for (String line : referentEvaluation) {
+
+            if (line.charAt(line.length() - 1) == ')') {
+
+                rootString = "[" + line + "]";
+            }
+            else {
+
+                rootString = line;
+            }
+            ret.add(rootString + "(" + s + ")");
+        }
+
+        return ret;
+    }
+
+    private boolean nontrivialEvaluation() {
+
+        if (this.children.size() > 0) {
+
+            return true;
+        }
+        if (this.parameter == null) {
+
+            return false;
+        }
+        return this.parameter.substituent.nontrivialEvaluation();
+    }
+
+    private ArrayList<String> writeEvaluation(ArrayList<String> previousPart) {
+
+        if (this.definition != null) {
+
+            ArrayList<Integer> indicesOfSubstitution = new ArrayList<>();
+            for (int i = 0; i < this.children.size(); i++) {
+
+                if (this.children.get(i).nonEmpty()) {
+
+                    indicesOfSubstitution.add(i);
+                }
+            }
+
+            if (this.definition.parameters.size() <= indicesOfSubstitution.size()) {
+
+                if (this.parameter == null) {
+
+                    previousPart.add(this.write());
+                    return this.definition.expression.writeEvaluation(previousPart);
+                }
+
+                previousPart.addAll(this.writeSubEvaluation());
+
+                if (this.children.size() > 0) {
+
+                    return this.definition.expression.writeEvaluation(previousPart);
+                }
+                return previousPart;
+            }
+
+            if (children.size() == 0) {
+
+                previousPart.add(this.write());
+                return previousPart;
+            }
+        }
+
+        previousPart.add(this.write());
+
+        if (this.definition == null) {
+
+            ArrayList<String> childrenValues = new ArrayList<>();
+            for (int i = 0; i < this.children.size(); i++) {
+
+                Expression child = this.children.get(i);
+
+                if (child.value != null && child.nontrivialEvaluation()) {
+
+                    ArrayList<String> childEvaluation = child.writeEvaluation();
+                    for (int j = 1; j < childEvaluation.size(); j++) {
+
+                        String line = childEvaluation.get(j);
+                        StringBuilder retLine = new StringBuilder(this.elementaryDefinition + "(");
+                        for (String childValue : childrenValues) {
+
+                            retLine.append(childValue).append(", ");
+                        }
+                        retLine.append(line);
+                        for (int k = i + 1; k < this.children.size(); k++) {
+
+                            retLine.append(", ").append(this.children.get(k).write());
+                        }
+                        retLine.append(")");
+
+                        previousPart.add(retLine.toString());
+                    }
+                    childrenValues.add(child.value.write());
+                }
+                else {
+
+                    childrenValues.add(child.write());
+                }
+            }
+        }
+
+        if (this.value != null && !this.value.write().equals(this.write())) {
+
+            previousPart.add(this.value.write());
+        }
+        else if (!this.elementaryDefinition.equals(this.write())) {
+
+            previousPart.add(this.elementaryDefinition);
+        }
+
+        return previousPart;
+    }
+
+    ArrayList<String> writeEvaluation() {
+
+        return this.writeEvaluation(new ArrayList<>());
+    }
+
     public static void main(String[] args) {
 
-        //String s = "{a,x.{r,y.a({z.r(r, z)}, y)}({r,y.a({z.r(r, z)}, y)}, x)}({f,n.if(=(n, 0), 1, *(n, f(-(n, 1))))}, 5)";
-        String s = "[{a.{t.a(t(t))}({t.a(t(t))})}({f,n.if(=(n, 0), 1, *(n, f(-(n, 1))))})](5)";
+        String s = "{a,x.{r,y.a({z.r(r, z)}, y)}({r,y.a({z.r(r, z)}, y)}, x)}({f,n.if(=(n, 0), 1, *(n, f(-(n, 1))))}, 5)";
+        //String s = "[{a.{t.a(t(t))}({t.a(t(t))})}({f,n.if(=(n, 0), 1, *(n, f(-(n, 1))))})](5)";
         //String s = "{a,b,c,d,e,f.a(b(c, d), e(f))}(,, 2,,,3)";
+        //String s = "{a.{b.+(a, b)}(2)}(+(2,1))";
+        //String s = "{x.+(2, x)}(+(2,1))";
+        //String s = "{x.x}(+(2,1))";
+        //String s = "{x.x}(3)";
         Expression expression = read(s);
-        System.out.println(expression.evaluate().write());
+        expression.evaluate();
+        ArrayList<String> evaluation = expression.writeEvaluation();
+        for (String line : evaluation) { System.out.println(line); }
     }
 }
