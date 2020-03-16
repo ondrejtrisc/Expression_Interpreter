@@ -2,6 +2,8 @@ package trisc.ondrej.oraculum;
 
 import java.io.IOException;
 import java.net.URLDecoder;
+import java.util.ArrayList;
+import java.util.Collections;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -59,9 +61,17 @@ class MyServer extends AbstractHandler {
         // Declare response status code
         response.setStatus(HttpServletResponse.SC_OK);
 
-        String result = cmdHandler.getResult();
-        System.out.println("result: " + result);
-        response.getWriter().println("serverUpdate(\'"+result+"\');");
+        ArrayList<String> result = cmdHandler.getResult();
+        System.out.println("result:");
+        for (String line : result) { System.out.println(line); }
+
+        result.add("");
+        Collections.reverse(result);
+
+        for (String line : result) {
+
+            response.getWriter().println("serverUpdate('" + line + "');");
+        }
 
         // Inform jetty that this request has now been handled
         baseRequest.setHandled(true);

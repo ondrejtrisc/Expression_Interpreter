@@ -1,14 +1,18 @@
 package trisc.ondrej.oraculum;
 
+import java.util.ArrayList;
+
 class CommandHandler {
 
-    private String result;
+    private ArrayList<String> result;
 
     void handleCommand(String cmd) {
 
         System.out.println(cmd);
-        result = Expression.read(cmd).evaluate().write();
+        Expression expression = Expression.read(cmd);
+        expression.evaluate();
+        result = expression.writeEvaluation();
     }
 
-    String getResult() { return result; }
+    ArrayList<String> getResult() { return result; }
 }

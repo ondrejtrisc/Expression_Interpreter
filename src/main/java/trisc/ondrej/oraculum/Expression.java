@@ -720,8 +720,8 @@ class Expression {
 
     public static void main(String[] args) {
 
-        String s = "{a,x.{r,y.a({z.r(r, z)}, y)}({r,y.a({z.r(r, z)}, y)}, x)}({f,n.if(=(n, 0), 1, *(n, f(-(n, 1))))}, 5)";
-        //String s = "[{a.{t.a(t(t))}({t.a(t(t))})}({f,n.if(=(n, 0), 1, *(n, f(-(n, 1))))})](5)";
+        //String s = "{a,x.{r,y.a({z.r(r, z)}, y)}({r,y.a({z.r(r, z)}, y)}, x)}({f,n.if(=(n, 0), 1, *(n, f(-(n, 1))))}, 5)";
+        String s = "[{a.{t.a(t(t))}({t.a(t(t))})}({f,n.if(=(n, 0), 1, *(n, f(-(n, 1))))})](5)";
         //String s = "{a,b,c,d,e,f.a(b(c, d), e(f))}(,, 2,,,3)";
         //String s = "{a.{b.+(a, b)}(2)}(+(2,1))";
         //String s = "{x.+(2, x)}(+(2,1))";
