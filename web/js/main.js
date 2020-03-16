@@ -24,8 +24,8 @@ const serverUpdate = response => {
 
 const main = (command, id) => {
 
-    const javaServerURL = "http://104.248.44.230:4242";
     //const javaServerURL = "http://127.0.0.1:4242";
+    const javaServerURL = "http://104.248.44.230:4242";
     const data = {cmd: command};
     displayId = id;
 
