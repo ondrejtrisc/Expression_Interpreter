@@ -52,9 +52,9 @@ class Function {
         StringBuilder head = new StringBuilder(this.parameters.get(0).name);
         for (int i = 1; i < this.parameters.size(); i++) {
 
-            head.append(",").append(this.parameters.get(i).name);
+            head.append(", ").append(this.parameters.get(i).name);
         }
-        return "{" + head + "." + this.expression.write() + "}";
+        return "{" + head + ". " + this.expression.write() + "}";
     }
 
     Function evaluate(ArrayList<Expression> ins) {

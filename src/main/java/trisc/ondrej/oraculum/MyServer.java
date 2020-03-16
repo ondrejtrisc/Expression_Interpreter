@@ -18,6 +18,7 @@ class MyServer extends AbstractHandler {
     private Server server;
 
     MyServer() {
+
         cmdHandler = new CommandHandler();
         server = null;
     }
@@ -28,10 +29,15 @@ class MyServer extends AbstractHandler {
         server.setHandler(this);
 
         try {
+
             server.start();
             server.join();
 
-        } catch (Exception e) { throw new Error(e); }
+        }
+        catch (Exception e) {
+
+            throw new Error(e);
+        }
     }
 
     @Override
@@ -43,13 +49,16 @@ class MyServer extends AbstractHandler {
         String queryString = request.getQueryString();
 
         if (queryString != null) {
+
             String[] queryParts = queryString.split("&");
             for (String queryPart : queryParts) {
+
                 String[] eqParts = queryPart.split("=");
                 String key = eqParts[0];
                 String val = URLDecoder.decode(eqParts[1], "UTF-8");
 
                 if (key.equals("cmd")) {
+
                     System.out.println("cmd: " + val);
                     cmdHandler.handleCommand(val);
                 }

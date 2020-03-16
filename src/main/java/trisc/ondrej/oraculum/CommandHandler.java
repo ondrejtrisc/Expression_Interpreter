@@ -9,10 +9,22 @@ class CommandHandler {
     void handleCommand(String cmd) {
 
         System.out.println(cmd);
-        Expression expression = Expression.read(cmd);
-        expression.evaluate();
-        result = expression.writeEvaluation();
+        try {
+
+            Expression expression = Expression.read(cmd);
+            expression.evaluate();
+            result = expression.writeEvaluation();
+        }
+        catch (Exception e) {
+
+            ArrayList<String> ret = new ArrayList<>();
+            ret.add("error");
+            result = ret;
+        }
     }
 
-    ArrayList<String> getResult() { return result; }
+    ArrayList<String> getResult() {
+
+        return result;
+    }
 }

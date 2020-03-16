@@ -1,35 +1,38 @@
-"use strict";
+'use strict';
 
-let results = [];
+let results = [[], [], [], [], [], [], [], [], [], [], [], [], [], [], []];
 
-const serverUpdate = (response) => {
+const render = (response, id) => {
 
-    var text = "";
-    var i;
+    results[id].push(response);
 
-    results.push(response);
+    let text = "";
+    for (let i = results[id].length - 1; i >=0; i--) {
 
-    console.log(results.length);
-
-    for (i = results.length - 1; i >=0; i--) {
-        text += results[i] + '<br />';
+        text += results[id][i] + '<br />';
     }
 
-    document.getElementById("display").innerHTML = text;
-    
-    //document.getElementById("display").innerHTML = response;
-}
+    document.getElementById('display' + id).innerHTML = text;
+};
 
-const main = (command) => {
+let displayId;
+
+const serverUpdate = response => {
+
+    render(response, displayId);
+};
+
+const main = (command, id) => {
 
     const javaServerURL = "http://104.248.44.230:4242";
     //const javaServerURL = "http://127.0.0.1:4242";
     const data = {cmd: command};
+    displayId = id;
 
     $.ajax({
         url: javaServerURL,
-        jsonp: "serverUpdate",
-        dataType: "jsonp",
+        jsonp: 'serverUpdate',
+        dataType: 'jsonp',
         data: data
     })
 }
