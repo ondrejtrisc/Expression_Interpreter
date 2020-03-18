@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
   example11.render();
   const example12 = new Example(12, 'Build your own higher-order functions', '{f. f(2)}({y. +(y, 3)})');
   example12.render();
-  const example13 = new Example(13, 'Return functions as values', '{x,y.+(x, y)}(2)');
+  const example13 = new Example(13, 'Return functions as values', '{x, y. +(x, y)}(2)');
   example13.render();
   const example14 = new Example(14, 'Write recursive algorithms with the use of the Y combinator', '[{f. {x. f(x(x))}({x. f(x(x))})}({factorial, n. if(=(n, 0), 1, *(n, factorial(-(n, 1))))})](5)');
   example14.render();
